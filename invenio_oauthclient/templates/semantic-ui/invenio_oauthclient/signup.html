@@ -20,32 +20,39 @@
       <div class="ui center aligned header">
         <div class="content">
           <div class="ui hidden divider"></div>
-          {%- block signup_app_icon %}
-            {% if app_icon -%}
-            <i class="{{app_icon}}"></i>
-            {% endif %}
-          {%- endblock %}
-          <h3 class="ui header">
-            {{ _('Sign-up with %(title)s!', title=app_title) }}
-          </h3>
-          <h5 class="ui grey header">
-            {{ _('Fill in your details to complete your registration. You only have to do this once.') }}
-          </h5>
-          <div class="ui hidden divider"></div>
+            {%- block signup_app_icon %}
+              {% if app_icon -%}
+              <i class="{{app_icon}}"></i>
+              {% endif %}
+            {%- endblock %}
+            {%- if config.SECURITY_REGISTERABLE %}
+              <h3 class="ui header">
+                {{ _('Sign-up with %(title)s!', title=app_title) }}
+              </h3>
+              <h5 class="ui grey header">
+                {{ _('Fill in your details to complete your registration. You only have to do this once.') }}
+              </h5>
+            {%- else %}
+              <h3>{{ _('Your %(title)s is not linked to any active account, and new-account registration is disabled.', title=app_title) }}</h3>
+            {%- endif %}
+            <div class="ui hidden divider"></div>
         </div>
     </div>
     {% endblock %}
-    {%- block signup_form %}
-    <form class="ui form" name="edit" method="post" role="form">
-      {%- for field in form %}
-        {{ render_field(field) }}
-      {%- endfor %}
-      <div class="ui hidden divider"></div>
-      <button type="submit" class="ui fluid large signup submit button">
-        <i class="ui edit outline icon"></i>{{ _('Complete registration') }}
-      </button>
-    </form>
-    {%- endblock %}
+
+    {%- if config.SECURITY_REGISTERABLE %}
+      {%- block signup_form %}
+        <form class="ui form" name="edit" method="post" role="form">
+        {%- for field in form %}
+          {{ render_field(field) }}
+        {%- endfor %}
+        <div class="ui hidden divider"></div>
+        <button type="submit" class="ui fluid large signup submit button">
+          <i class="ui edit outline icon"></i>{{ _('Complete registration') }}
+        </button>
+      </form>
+      {%- endblock %}
+    {%- endif %}
   </div>
   {%- endblock %}
 </div>
